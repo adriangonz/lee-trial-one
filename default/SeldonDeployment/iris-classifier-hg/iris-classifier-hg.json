@@ -4,10 +4,7 @@
     "metadata": {
         "name": "iris-classifier-hg",
         "namespace": "default",
-        "creationTimestamp": null,
-        "labels": {
-            "app.kubernetes.io/instance": "lee-trial-one-default"
-        }
+        "creationTimestamp": null
     },
     "spec": {
         "name": "iris-classifier-hg",
@@ -72,7 +69,43 @@
                     "version": "default"
                 },
                 "svcOrchSpec": {},
-                "traffic": 100
+                "traffic": 90
+            },
+            {
+                "name": "canary",
+                "graph": {
+                    "name": "iris-classifier-hg-container",
+                    "implementation": "XGBOOST_SERVER",
+                    "endpoint": {
+                        "type": "REST"
+                    },
+                    "modelUri": "gs://seldon-models/xgboost/iris",
+                    "logger": {
+                        "mode": "all"
+                    }
+                },
+                "componentSpecs": [
+                    {
+                        "metadata": {
+                            "creationTimestamp": "2020-09-11T17:35:38Z"
+                        },
+                        "spec": {
+                            "containers": [
+                                {
+                                    "name": "iris-classifier-hg-container",
+                                    "resources": {}
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "replicas": 1,
+                "annotations": {
+                    "seldon.io/canary": "true"
+                },
+                "engineResources": {},
+                "svcOrchSpec": {},
+                "traffic": 10
             }
         ],
         "annotations": {
